@@ -18,7 +18,7 @@ library(cowplot)
 # FIRST STEP: let's create the DfM for the training-set
 #####################################################
 
-x <- read.csv("train_disaster.csv", stringsAsFactors=FALSE)
+x <- read.csv("Input Data/Day 1/train_disaster.csv", stringsAsFactors=FALSE)
 str(x)
 
 # if you have problems to open this csv file, plz use the below rds file
@@ -53,7 +53,7 @@ topfeatures(Dfm_train , 20)  # 20 top words
 # SECOND STEP: let's create the DfM for the test-set
 #####################################################
 
-x10 <- read.csv("test_disaster.csv", stringsAsFactors=FALSE)
+x10 <- read.csv("Input Data/Day 1/test_disaster.csv", stringsAsFactors=FALSE)
 str(x10)
 
 # if you have problems to open this csv file, plz use the below rds file
@@ -274,13 +274,14 @@ head(predict(NB ,test, type="prob" ))
 # you to employ compressed matrices.
 # The ranger package also works with a data frame, not only with a matrix.
 
-# Note that I haven't selected any specific values for the hyperameters 
+# Note that I haven't selected any specific values for the hyperpameters 
 # (or tuning-parameters).
 # By default, for example, the number of trees employed is 500 (a value that you can change). 
 # A RF has also several other hyperparameters. More on this later on!
 # Here I specify keep.inbag=TRUE (the default is FALSE) cause I want to save and report 
 # how often observations (i.e., texts) are in-bag in each tree
 
+library(ranger)
 set.seed(123)  # (define a set.seed for being able to replicate the results!)
 system.time(RF <- ranger(y= Dfm_train@docvars$choose_one, x=train, keep.inbag=TRUE))
 RF
@@ -505,7 +506,7 @@ head(sort(RFI$variable.importance , decreasing=TRUE), 10)
 # Let's analyze how travelers in February 2015 expressed their feelings on Twitter about
 # US Airline Sentiment. Here a sample of 1,300 tweets
 
-airlines <- read.csv("train_airlines.csv")
+airlines <- read.csv("Input Data/Day 1/train_airlines.csv")
 str(airlines)
 
 # if you have problems to open this csv file, plz use the below rds file
@@ -527,7 +528,7 @@ topfeatures(Dfm_train , 20)  # 20 top words
 # SECOND STEP: let's create the DfM for the test-set
 #####################################################
 
-test_airlines<- read.csv("test_airlines.csv", stringsAsFactors=FALSE)
+test_airlines<- read.csv("Input Data/Day 1/test_airlines.csv", stringsAsFactors=FALSE)
 str(test_airlines)
 
 # if you have problems to open this csv file, plz use the below rds file
@@ -637,6 +638,7 @@ plot_top_features(NB_prob, "neutral", "neutral")
 p1 <- plot_top_features(NB_prob, "positive", "positive",
                         fill_color = "steelblue")
 
+
 p2 <- plot_top_features(NB_prob, "negative", "negative",
                         fill_color = "tomato")
 
@@ -697,3 +699,14 @@ system.time(predicted_rf <- predict(RFI, test))
 # So which of the two to use? More on this later on
 prop.table(table(predicted_rf$predictions ))
 prop.table(table(predicted_nb ))
+
+
+# Bonus -------------------------------------------------------------------
+
+library(rpart)
+install.packages("rattle")
+library(rattle)
+nation <- read.csv("Input Data/Day 1/Nationality.csv", stringsAsFactors=FALSE)
+fit <- rpart(Nationality ~ Sex + Weight, method="class", data=nation,
+             minsplit=2, minbucket=1)
+fancyRpartPlot(fit, palettes = c("Greens", "Blues"), sub = "")
