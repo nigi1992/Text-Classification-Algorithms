@@ -497,7 +497,7 @@ head(Dictionary )
 
 # Let's reshape the data-frame and let's plot it
 str(Dictionary)
-Dictionary_long<-melt(Dictionary,id.vars=c("doc_id"))
+Dictionary_long <- reshape2::melt(Dictionary, id.vars=c("doc_id"))
 str(Dictionary_long)
 
 # bar plot with flipped coords
@@ -526,7 +526,7 @@ toks <- tokens(data_corpus_inaugural)
 Mydfm <- dfm(toks)
 byPresMat <- dfm_lookup(Mydfm  , dictionary = multiword_dict)
 byPresMat
-Dictionary <-convert(byPresMat, to="data.frame")
+Dictionary <- convert(byPresMat, to="data.frame")
 # all 0s!
 head(Dictionary )
 
