@@ -259,7 +259,7 @@ table(classes_labels)
 # A saved model contains the weight values, the model's configuration, 
 # and the optimizer's configuration.
 
-save_model(model, "my_model.keras")
+save_model(model, "Scripts/my_model.keras")
 modelSaved <- load_model("my_model.keras")
 modelSaved
 model
