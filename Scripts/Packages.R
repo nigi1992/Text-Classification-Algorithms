@@ -92,6 +92,18 @@ install.packages("glue", repos="http://cran.us.r-project.org")
 install.packages("tidytext", repos = "https://cloud.r-project.org")
 
 
+# Encoders ----------------------------------------------------------------
+
+library(reticulate)
+use_condaenv("r-tensorflow", required = TRUE)
+py_install(c("transformers", "numpy",
+             "datasets", "random", "scikit-learn"), pip =
+             TRUE)
+py_install(c("accelerate", "torch",
+             "transformers[torch]"), pip = TRUE)
+conda_list()
+
+
 # BERT --------------------------------------------------------------------
 
 library(reticulate)
